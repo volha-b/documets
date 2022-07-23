@@ -1,0 +1,101 @@
+1)mysql> select * from Shippers;  
+
+2)mysql> select * from Employees limit 3;
+
+3)mysql> select BirthDate, FirstName, LastName from Employees limit 3;
+
+4)mysql> select FirstName, LastName from Employees where year(BirthDate)=1958;
+
+5)mysql> select * from Products where Price between 23 and 25;
+
+6)mysql> select * from Products order by Price asc limit 1;
+
+7)mysql> select * from Products order by Price desc limit 1;
+
+8)mysql> select * from Products where Unit='10 pkgs.';
+
+9)mysql> select Address from Suppliers where City='Tokyo' or City='Frankfurt' or City='Osaka';
+
+10)mysql> select ProductName from Products where ProductName like 'G%' and Price>37;
+
+11)mysql> select Country from Suppliers where Country like 'S____';
+
+12)mysql> select sum(Price) as 'Summ' from Products where ProductName like '%od%';
+
+13)mysql> select round(avg(Price),2) as 'Summ' from Products where Unit like '%bottles';
+
+14)mysql> select count(Country) as Countt from Customers where Country not in ('Germany', 'France');
+
+15)mysql> select FirstName from Employees where BirthDate>'1968-01-01' order by FirstName;
+
+16)mysql>(select ProductName from Products where Price=13) 
+         union 
+         (select ProductName from Products where Price=15) 
+         order by ProductName asc;
+		 
+17)mysql> select Products.ProductName, Suppliers.SupplierName
+          from Products, Suppliers 
+          where Products.SupplierID=Suppliers.SupplierID 
+          and ProductName like '__m%';
+		  
+18)mysql> select Employees.FirstName, Employees.LastName from Employees 
+		  inner join Orders 
+		  on Employees.EmployeeID=Orders.EmployeeID 
+		  where OrderDate='1996-11-27';	
+		  
+          select FirstName, LastName from Employees 
+		  where EmployeeID=
+		  (select EmployeeID from Orders where OrderDate='1996-11-27');
+		  
+19)mysql> select Products.ProductName, Suppliers.SupplierName, Products.Price 
+          from Products, Suppliers
+          where Suppliers.SupplierID=Products.SupplierID
+          and SupplierName="Grandma Kelly's Homestead" 
+		  and Price>27;
+		  
+20)mysql> select sum(OrderDetails.Quantity) as Summ from Products
+          inner join OrderDetails on Products.ProductID=OrderDetails.ProductID 
+		  where ProductName='Queso Cabrales';
+		 
+          select sum(Quantity) as Summ from OrderDetails
+          where ProductID=
+		  (select ProductID from Products where ProductName='Queso Cabrales');
+		  
+21)mysql>select Orders.OrderID, Customers.CustomerName, Employees.FirstName, Employees.LastName
+         from Orders
+		 left join Customers on Customers.CustomerID=Orders.CustomerID
+         left join Employees on Employees.EmployeeID=Orders.EmployeeID
+	     where Address='Ekergatan 24';
+		 
+	
+22)mysql>SELECT Orders.OrderID, Customers.CustomerName, concat (Employees.FirstName, Employees.LastName) as EmployeeName   
+		 from Orders 
+		 LEFT JOIN Customers on Customers.CustomerID=Orders.CustomerID
+		 LEFT JOIN Employees on Employees.EmployeeID=Orders.EmployeeID
+		 where Address='Ekergatan 24';
+		 
+23)mysql>  select Orders.OrderID, Orders.OrderDate, Products.ProductName from Orders, Products, OrderDetails
+           where Orders.OrderID=OrderDetails.OrderID and OrderDetails.ProductID=Products.ProductID
+           and Year(OrderDate)='1997' and LENGTH(ProductName)<'5';
+
+				 
+		 select Orders.OrderID, Orders.OrderDate, Products.ProductName from Orders 
+		 join OrderDetails on Orders.OrderID=OrderDetails.OrderID
+		 join Products on OrderDetails.ProductID=Products.ProductID
+         where Year(OrderDate)='1997' and LENGTH(ProductName)<'5';
+		 
+24)mysql>select Categories.CategoryName, Products.ProductName
+         from Categories, Products, Orders, OrderDetails, Customers 
+         where Customers.CustomerID=Orders.CustomerID and Orders.OrderID=OrderDetails.OrderID
+	     and OrderDetails.ProductID=Products.ProductID
+	     and Categories.CategoryID=Products.CategoryID 
+	     and CustomerName='Blondel pere et fils' and CategoryName like '% %';
+	
+25)mysql>select count(distinct CustomerName) as Buyers
+         from Customers, Products, Orders, OrderDetails
+         where Customers.CustomerID=Orders.CustomerID 
+         and Orders.OrderID=OrderDetails.OrderID
+	     and OrderDetails.ProductID=Products.ProductID
+	     and ProductName in ("Queso Cabrales", "Gustaf's Knäckebröd",
+		 "Louisiana Fiery Hot Pepper Sauce", "Schoggi Schokolade", "Gnocchi di nonna Alice");
+	
